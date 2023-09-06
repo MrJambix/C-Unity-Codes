@@ -1,0 +1,34 @@
+Instruction: 
+
+
+To create a UI in Unity with buttons for selecting and buying buildings, and to assign the buildingNameText and buildingPriceText Text components, follow these steps:
+
+Create a Canvas:
+
+In the Unity Hierarchy window, right-click, and select "UI" > "Canvas" to create a Canvas GameObject.
+Rename the Canvas to something like "BuildingUI."
+Create Text Components:
+
+Right-click on the "BuildingUI" Canvas in the Hierarchy and select "UI" > "Text" to create two Text components.
+Rename the first Text component to "buildingNameText" and the second one to "buildingPriceText."
+Create Buttons:
+
+Right-click on the "BuildingUI" Canvas in the Hierarchy and select "UI" > "Button" to create a Button GameObject.
+Repeat this step to create another Button for the "Buy" action.
+Position and Resize UI Elements:
+
+Adjust the position and size of the Text components and Buttons on the Canvas. You can do this by selecting them in the Hierarchy and using the RectTransform component in the Inspector window.
+Create Button Text:
+
+Select each Button in the Hierarchy and locate the child Text GameObject. Rename the Text GameObjects to "SelectButton" and "BuyButton," respectively.
+Change the text on the SelectButton to "Select" and on the BuyButton to "Buy."
+Attach the Script:
+
+Attach the C# script you created earlier (BuildingManager) to a GameObject in the scene or create a new empty GameObject, and attach the script to it.
+Assign Text Components:
+
+Select the GameObject with the BuildingManager script attached.
+In the Inspector, you will see the two Text components, "Building Name Text" and "Building Price Text." Assign the corresponding Text components you created earlier to these fields.
+Now, your Unity scene should have a Canvas with Text components for displaying building information and Buttons for selecting and buying buildings. Make sure you wire up the button click events in the script to trigger the corresponding functions (e.g., SelectBuilding and BuyBuilding) when the buttons are clicked.
+
+Also, ensure that you have set up your database and implemented the necessary functions in the script to interact with it, as mentioned in the previous script provided.
