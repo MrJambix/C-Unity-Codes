@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace ResourceTrackerLibrary
@@ -11,17 +12,18 @@ namespace ResourceTrackerLibrary
 		// Token: 0x0600346E RID: 13422
 		public ResourceTracker()
 		{
-			this.nodes = new List<ResourceNode__3>();
-			this.player = new Player__3(0f, 0f, 0f);
+			this.nodes = new List<ResourceNode__5>();
+			this.player = new Player__5(0f, 0f, 0f);
+			this.ShowGUI();
+		}
+
+		// Token: 0x0600346F RID: 13423
+		public void SetPlayerPosition(float x, float y, float z)
+		{
+			this.player = new Player__5(x, y, z);
 		}
 
 		// Token: 0x06003470 RID: 13424
-		public void SetPlayerPosition(float x, float y, float z)
-		{
-			this.player = new Player__3(x, y, z);
-		}
-
-		// Token: 0x06003471 RID: 13425
 		public float GetDistanceToNearestNode()
 		{
 			if (this.nodes.Count == 0)
@@ -29,7 +31,9 @@ namespace ResourceTrackerLibrary
 				throw new Exception("No resource nodes have been added.");
 			}
 			float shortestDistance = float.MaxValue;
-			foreach (ResourceNode__3 node in this.nodes)
+			foreach (ResourceNode__5 node in from n in this.nodes
+			where n.Type == this.selectedResource
+			select n)
 			{
 				float distance = this.CalculateDistance(this.player, node);
 				if (distance < shortestDistance)
@@ -40,14 +44,14 @@ namespace ResourceTrackerLibrary
 			return shortestDistance;
 		}
 
-		// Token: 0x0600349B RID: 13467
-		public void AddNode(ResourceNode__3 node)
+		// Token: 0x060034C2 RID: 13506
+		public void AddNode(ResourceNode__5 node)
 		{
 			this.nodes.Add(node);
 		}
 
-		// Token: 0x0600349E RID: 13470
-		private float CalculateDistance(Player__3 player, ResourceNode__3 node)
+		// Token: 0x060034C5 RID: 13509
+		private float CalculateDistance(Player__5 player, ResourceNode__5 node)
 		{
 			float num = player.X - node.X;
 			float dy = player.Y - node.Y;
@@ -55,26 +59,71 @@ namespace ResourceTrackerLibrary
 			return (float)Math.Sqrt((double)(num * num + dy * dy + dz * dz));
 		}
 
-		// Token: 0x0600349F RID: 13471
-		public void ShowDistanceToNearestNode()
+		// Token: 0x060034C6 RID: 13510
+		private void ShowGUI()
 		{
-			float distance = this.GetDistanceToNearestNode();
-			Form form = new Form();
-			form.Width = 300;
-			form.Height = 150;
-			form.Text = "Resource Tracker";
-			Label label = new Label();
-			label.Text = string.Format("Distance to nearest node: {0} units", distance);
-			label.Dock = DockStyle.Fill;
-			label.TextAlign = ContentAlignment.MiddleCenter;
+			Form form = new Form
+			{
+				Text = "Resource Tracker",
+				Size = new Size(300, 150)
+			};
+			Label label = new Label
+			{
+				Text = "Select Resource Type",
+				Location = new Point(10, 10),
+				AutoSize = true
+			};
 			form.Controls.Add(label);
-			form.ShowDialog();
+			ComboBox resourceOptions = new ComboBox
+			{
+				Location = new Point(10, 30),
+				DropDownStyle = ComboBoxStyle.DropDownList
+			};
+			string[] minerals = new string[]
+			{
+				"Coal",
+				"Copper Vein Small",
+				"Copper Vein Large",
+				"Iron Vein Small",
+				"Iron Vein Large",
+				"Gold Small",
+				"Gold Large",
+				"Silver Small",
+				"Silver Large",
+				"Platinum Small",
+				"Platinum Large",
+				"Palladium Small",
+				"Palladium Large",
+				"Feygold Small",
+				"Feygold Large",
+				"Crimsonite Small",
+				"Crimsonite Large",
+				"Celestium Small",
+				"Celestium Large",
+				"Azurium Small",
+				"Azurium Large",
+				"Mystril Small",
+				"Mystril Large"
+			};
+			ComboBox.ObjectCollection items3 = resourceOptions.Items;
+			object[] array = minerals;
+			object[] items2 = array;
+			items3.AddRange(items2);
+			form.Controls.Add(resourceOptions);
+			resourceOptions.SelectedIndexChanged += delegate(object sender, EventArgs e)
+			{
+				this.selectedResource = resourceOptions.SelectedItem.ToString();
+			};
+			Application.Run(form);
 		}
 
-		// Token: 0x04002D6F RID: 11631
-		private List<ResourceNode__3> nodes;
+		// Token: 0x04002D82 RID: 11650
+		private List<ResourceNode__5> nodes;
 
-		// Token: 0x04002D70 RID: 11632
-		private Player__3 player;
+		// Token: 0x04002D83 RID: 11651
+		private Player__5 player;
+
+		// Token: 0x04002D84 RID: 11652
+		private string selectedResource = "";
 	}
 }
