@@ -1,0 +1,69 @@
+using UnityEngine;
+using UnityEngine.UI;
+using MySql.Data.MySqlClient;  // Import the MySQL libraries
+
+public class GuildManager : MonoBehaviour
+{
+    public GameObject GuildPanel;
+    public GameObject InvitationPanel;
+    public GameObject RankChangePanel;
+
+    public Text GuildDetailsText;
+    public GameObject GuildMembersScrollView;
+    public Button InviteButton;
+    public Button ChangeRankButton;
+
+    public InputField InviteInputField;
+    public Dropdown RankDropdown;
+
+    // Database connection settings
+    private string connectionString = "Server=your_server;Database=your_dbname;User ID=your_user;Password=your_password;CharSet=utf8;";
+
+    private void Start()
+    {
+        InvitationPanel.SetActive(false);
+        RankChangePanel.SetActive(false);
+    }
+
+    public void OpenInvitePanel()
+    {
+        InvitationPanel.SetActive(true);
+        RankChangePanel.SetActive(false);
+    }
+
+    public void OpenRankChangePanel()
+    {
+        RankChangePanel.SetActive(true);
+        InvitationPanel.SetActive(false);
+    }
+
+    public void InvitePlayer()
+    {
+        string playerName = InviteInputField.text;
+        // Insert this player's invite into the database
+        using (MySqlConnection connection = new MySqlConnection(connectionString))
+        {
+            connection.Open();
+            string inviteQuery = "INSERT INTO GuildInvites (inviterID, inviteeName) VALUES ('YOUR_PLAYER_ID', @inviteeName)";
+            MySqlCommand cmd = new MySqlCommand(inviteQuery, connection);
+            cmd.Parameters.AddWithValue("@inviteeName", playerName);
+            cmd.ExecuteNonQuery();
+        }
+        InvitationPanel.SetActive(false);
+    }
+
+    public void ChangePlayerRank()
+    {
+        string newRank = RankDropdown.options[RankDropdown.value].text;
+        // Update the player's rank in the database
+        using (MySqlConnection connection = new MySqlConnection(connectionString))
+        {
+            connection.Open();
+            string rankQuery = "UPDATE GuildMembers SET rank=@newRank WHERE playerID='YOUR_PLAYER_ID'";
+            MySqlCommand cmd = new MySqlCommand(rankQuery, connection);
+            cmd.Parameters.AddWithValue("@newRank", newRank);
+            cmd.ExecuteNonQuery();
+        }
+        RankChangePanel.SetActive(false);
+    }
+}

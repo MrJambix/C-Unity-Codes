@@ -1,16 +1,15 @@
-CREATE TABLE guilds (
-    guild_id INT AUTO_INCREMENT PRIMARY KEY,
-    guild_name VARCHAR(255) NOT NULL,
-    guild_leader_id INT NOT NULL,
-    member_count INT NOT NULL DEFAULT 1
+USE GameDatabase;
+
+CREATE TABLE Guilds (
+    GuildID INT AUTO_INCREMENT PRIMARY KEY,
+    GuildName VARCHAR(255) NOT NULL,
+    GuildLeaderID INT NOT NULL
 );
 
-CREATE TABLE guild_members (
-    member_id INT AUTO_INCREMENT PRIMARY KEY,
-    guild_id INT,
-    player_id INT NOT NULL,
-    player_name VARCHAR(255) NOT NULL,
-    status ENUM('online', 'offline') NOT NULL DEFAULT 'offline',
-    location VARCHAR(255),
-    FOREIGN KEY (guild_id) REFERENCES guilds(guild_id)
+CREATE TABLE GuildMembers (
+    MemberID INT AUTO_INCREMENT PRIMARY KEY,
+    GuildID INT,
+    PlayerID INT NOT NULL,
+    JoinDate DATE,
+    FOREIGN KEY (GuildID) REFERENCES Guilds(GuildID)
 );
